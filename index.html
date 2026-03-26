@@ -43,7 +43,7 @@
       background: var(--bg);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     /* ---- Mosaic hero ---- */
@@ -344,7 +344,50 @@
       color: var(--text-2);
     }
 
+    /* ---- Side photos ---- */
+    .side-photo {
+      position: absolute;
+      width: 260px;
+      margin: 0;
+      z-index: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .side-photo.photo-left {
+      left: calc(-50vw + 50% + 60px);
+    }
+
+    .side-photo.photo-right {
+      right: calc(-50vw + 50% + 80px);
+    }
+
+    .side-photo img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .side-photo figcaption {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-2);
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    .side-photo:hover {
+      transform: rotate(0deg) scale(1.05) !important;
+      z-index: 4;
+    }
+
     /* ---- Mobile ---- */
+    @media (max-width: 1100px) {
+      .side-photo { display: none; }
+    }
+
     @media (max-width: 560px) {
       .name { font-size: 1.8rem; }
       .project { grid-template-columns: 1fr; gap: 8px; }
@@ -376,7 +419,7 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="container" style="position: relative;">
     <header>
       <h1 class="name" data-scatter>Adi Takhar<span>.</span></h1>
       <p class="subtitle" data-scatter>// high school maker — robotics, 3D printing, code</p>
@@ -394,12 +437,16 @@
         <p data-scatter>From Arduino alarms to ESP32 sensors and OpenCV turrets — I love turning ideas into working prototypes.</p>
       </div>
 
-      <section id="about">
+      <section id="about" style="position: relative;">
         <div class="section-label" data-scatter>About</div>
         <p data-scatter>I'm a high school student who enjoys robotics, 3D printing, and tinkering. I'm currently working on an OpenCV-based automated sentry turret.</p>
+        <figure class="side-photo photo-right" style="transform: rotate(3deg); top: -40px;">
+          <img src="https://cdn.hackclub.com/019d2482-6831-7f4f-9d13-2dbf729148a9/IMG_0139.png" alt="Me in a plane's cockpit" loading="lazy">
+          <figcaption>Me in a plane's cockpit</figcaption>
+        </figure>
       </section>
 
-      <section id="projects">
+      <section id="projects" style="position: relative;">
         <div class="section-label" data-scatter>Projects</div>
         <div class="projects">
           <a class="project" href="https://github.com/Adad650/discordBot-v1" target="_blank" rel="noopener">
@@ -466,9 +513,13 @@
             <div class="project-right"><span class="tag">Python</span><span class="arrow">&rarr;</span></div>
           </a>
         </div>
+        <figure class="side-photo photo-left" style="transform: rotate(-2.5deg); bottom: 40px;">
+          <img src="https://cdn.hackclub.com/019d2482-6e50-7d4b-bb7e-cdd59cb602e5/IMG_1900.jpg" alt="Me simming the racing" loading="lazy">
+          <figcaption>Me simming the racing</figcaption>
+        </figure>
       </section>
 
-      <section id="skills">
+      <section id="skills" style="position: relative;">
         <div class="section-label" data-scatter>Skills</div>
         <div class="skills">
           <span class="skill" data-scatter>Python</span>
@@ -737,7 +788,11 @@
         requestAnimationFrame(updateScatter);
       }
       window.removeEventListener('scroll', onScroll);
-      window.addEventListener('scroll', combinedScroll, { passive: true });
+      function combinedScrollFull() {
+        origOnScroll();
+        requestAnimationFrame(updateScatter);
+      }
+      window.addEventListener('scroll', combinedScrollFull, { passive: true });
       updateScatter();
     })();
   </script>
